@@ -14,10 +14,11 @@ namespace SwordFlowScripts
         public Transform shieldCenter;
         public float offsetPositionCenterX = 0f;
         public float offsetPositionCenterY = 0f;
-        public PlayerMovement playerController;
+        public CharacterController2D playerController;
 
         private Collider2D Collider;
         private Vector2 mousePos;
+        private bool facingRight = false;
 
         private void Start()
         {
@@ -38,13 +39,12 @@ namespace SwordFlowScripts
             }
         }
 
-        // Update is called once per frame
         void FixedUpdate()
         {
             Vector2 shieldCenterPos = new Vector2(shieldCenter.position.x + GetOffsetPositionX(), shieldCenter.position.y + offsetPositionCenterY);
-            shield.rotation = playerController.facingLeft ? 0f : facingRightRotation;
             shield.position = shieldCenterPos;
-            
+            shield.rotation = 0f;
+
             if ((Input.GetKey(KeyCode.Mouse0) && isOnRightHand) || (Input.GetKey(KeyCode.Mouse1) && !isOnRightHand))
             {
                 shieldCenterPos = new Vector2(shieldCenter.position.x, shieldCenter.position.y);
@@ -52,22 +52,36 @@ namespace SwordFlowScripts
                 float flatAngleToMouse = Mathf.Atan2(playerToMouse.y, playerToMouse.x);
                 float module = playerToMouse.magnitude > radius ? radius : playerToMouse.magnitude;
 
-                float angleShielPos = flatAngleToMouse - positionAngleOffset * Mathf.Deg2Rad;
-                Vector2 newShieldPos = new Vector2(-module * Mathf.Sin(angleShielPos), module * Mathf.Cos(angleShielPos));
+                float angleShieldPos = flatAngleToMouse - positionAngleOffset * Mathf.Deg2Rad;
+                Vector2 newShieldPos = new Vector2(-module * Mathf.Sin(angleShieldPos), module * Mathf.Cos(angleShieldPos));
 
                 shield.position = newShieldPos + shieldCenterPos;
                 shield.rotation = flatAngleToMouse * Mathf.Rad2Deg + rotationAngleOffset;
+                if (!facingRight)
+                {
+                    shield.rotation += facingRightRotation;
+                }
 
             }
+            else
+            {
+                if (playerController.IsFacingRight() != facingRight) Flip();
+            }
+        }
+
+        private void Flip()
+        {
+            facingRight = !facingRight;
+            shield.transform.Rotate(0f, 180f, 0f);
         }
 
         private float GetOffsetPositionX()
         {
-            if (playerController.facingLeft)
+            if (playerController.IsFacingRight())
             {
-                return -offsetPositionCenterX;
+                return offsetPositionCenterX;
             }
-            return offsetPositionCenterX;
+            return -offsetPositionCenterX;
         }
     }
 }
