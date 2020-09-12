@@ -1,10 +1,12 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerMovement : MonoBehaviour
 {
     public CharacterController2D controller;
     public float runSpeed = 40f;
     public float rollingDuration = 0.01f;
+    public Text gameOverText;
 
     private float horizontalMove = 0f;
     private bool jump = false;
@@ -57,5 +59,10 @@ public class PlayerMovement : MonoBehaviour
         // Move our character
         controller.Move(horizontalMove * Time.fixedDeltaTime, rolling, jump);
         jump = false;
+    }
+
+    private void OnDestroy()
+    {
+        gameOverText.enabled = true;
     }
 }

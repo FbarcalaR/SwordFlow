@@ -1,4 +1,4 @@
-﻿using SwordFlowScripts;
+﻿using System.Linq;
 using UnityEngine;
 
 public class Arrow : MonoBehaviour
@@ -7,6 +7,7 @@ public class Arrow : MonoBehaviour
     public int damage = 2;
     public Rigidbody2D rb;
     public GameObject ImpactEffect;
+    public int[] noTargetLayers;
 
     // Start is called before the first frame update
     void Start()
@@ -16,13 +17,16 @@ public class Arrow : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        HealthController healthComponent = collision.GetComponent<HealthController>();
-        if(healthComponent != null)
+        if (!noTargetLayers.Contains(collision.gameObject.layer))
         {
-            healthComponent.TakeDamage(damage);
-            if (ImpactEffect != null)  Instantiate(ImpactEffect, transform.position, transform.rotation);
+            HealthController healthComponent = collision.GetComponent<HealthController>();
+            if (healthComponent != null)
+            {
+                healthComponent.TakeDamage(damage);
+                if (ImpactEffect != null) Instantiate(ImpactEffect, transform.position, transform.rotation);
+            }
+            Destroy(gameObject);
         }
 
-        Destroy(gameObject);
     }
 }
