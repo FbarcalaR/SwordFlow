@@ -61,11 +61,16 @@ public class GameController : MonoBehaviour
 
     void Quit()
     {
-    #if UNITY_EDITOR
-            UnityEditor.EditorApplication.isPlaying = false;
-    #else
-        Application.Quit();
-    #endif
+        var player = FindObjectOfType<PlayerSingleton>().gameObject;
+        Destroy(player);
+        var gameScore = FindObjectOfType<GameScore>().gameObject;
+        Destroy(gameScore);
+        var canvas = FindObjectOfType<Canvas>().gameObject;
+        Destroy(canvas);
+
+        int currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
+        SceneManager.LoadScene(currentSceneIndex - 1);
+        Destroy(this.gameObject);
     }
 
 }

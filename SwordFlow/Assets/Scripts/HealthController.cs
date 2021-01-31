@@ -41,6 +41,21 @@ public class HealthController : MonoBehaviour
         }
     }
 
+    public void AddHealth(float addedHealth)
+    {
+        health += addedHealth;
+        health = health > 20 ? 20 : health;
+        if (gameObject.name == "Player")
+        {
+            CheckPlayerSlider();
+        }
+        if (slider != null)
+        {
+            slider.value = health;
+            fill.color = gradient.Evaluate(slider.normalizedValue);
+        }
+    }
+
     private void CheckPlayerSlider()
     {
 
