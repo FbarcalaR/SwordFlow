@@ -72,11 +72,11 @@ public class PatrolController : MonoBehaviour
         Collider2D[] enemiesToDamage = Physics2D.OverlapCircleAll(attackPosition.position, attackRange, whatIsEnemies);
         for (int i = 0; i < enemiesToDamage.Length; i++)
         {
-            var shield = enemiesToDamage[i].GetComponent<Shield>();
+            var shield = enemiesToDamage[i].GetComponentInChildren<Shield>();
             var finalDamage = damage;
             if (shield != null)
                 finalDamage = enemiesToDamage[i].enabled ? finalDamage * shield.avoidedDamagePercentage : finalDamage;
-            enemiesToDamage[i].GetComponent<HealthController>().TakeDamage(finalDamage);
+            enemiesToDamage[i].GetComponentInParent<HealthController>().TakeDamage(finalDamage);
         }
     }
 

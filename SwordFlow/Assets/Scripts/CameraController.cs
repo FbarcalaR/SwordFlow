@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class CameraController : MonoBehaviour {
 
@@ -13,6 +11,12 @@ public class CameraController : MonoBehaviour {
 
     void Update()
     {
+        if (Target == null)
+        {
+            var player = FindObjectOfType<PlayerSingleton>();
+            if (player == null) return;
+            Target = player.GetComponentInChildren<Rigidbody2D>().gameObject;
+        }
         Vector3 Targetpos = new Vector3(Target.transform.position.x, Target.transform.position.y + PosY, -100);
         transform.position = Vector3.Lerp(transform.position, Targetpos, Time.deltaTime * Smoothvalue);
     }

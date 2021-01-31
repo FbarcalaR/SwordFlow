@@ -20,7 +20,9 @@ public class PlayerAttackController: MonoBehaviour
                 Collider2D[] enemiesToDamage = Physics2D.OverlapCircleAll(attackPosition.position, attackRange, whatIsEnemies);
                 for (int i = 0; i < enemiesToDamage.Length; i++)
                 {
-                    enemiesToDamage[i].GetComponent<HealthController>().TakeDamage(damage);
+                    var enemyHealth = enemiesToDamage[i].GetComponentInParent<HealthController>();
+                    if (enemyHealth == null) continue;
+                    enemiesToDamage[i].GetComponentInParent<HealthController>().TakeDamage(damage);
                     score.AddScore((int)damage);
                 }
             }

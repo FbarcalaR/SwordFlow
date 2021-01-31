@@ -6,7 +6,8 @@ TagManager:
   tags:
   - Ground
   - Block
-  - DeathTrigger
+  - GameScore
+  - Canvas
   layers:
   - Default
   - TransparentFX

@@ -49,6 +49,8 @@ SpriteRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -121,6 +123,7 @@ MonoBehaviour:
     m_Bits: 256
   damage: 5
   rb: {fileID: 8914593938178500934}
+  score: {fileID: 0}
 --- !u!50 &8914593938178500934
 Rigidbody2D:
   serializedVersion: 4
@@ -181,9 +184,11 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8914593938766087979}
-  m_Layer: 0
+  - component: {fileID: 1083120197685737520}
+  - component: {fileID: 5053163025635606812}
+  m_Layer: 9
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -203,6 +208,62 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1083120197685737520
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8914593938766087978}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 37467e85f7f95f441b15b1bf67dfd1cc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &5053163025635606812
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8914593938766087978}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 05c244d1a20bb57428ab82bf8e6e3a04, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  health: 20
+  slider: {fileID: 0}
+  gradient:
+    serializedVersion: 2
+    key0: {r: 1, g: 0, b: 0.07592964, a: 1}
+    key1: {r: 0.8773585, g: 0.87304753, b: 0.21106264, a: 1}
+    key2: {r: 0.19988342, g: 0.5, b: 0.19103774, a: 0}
+    key3: {r: 0, g: 0, b: 0, a: 0}
+    key4: {r: 0, g: 0, b: 0, a: 0}
+    key5: {r: 0, g: 0, b: 0, a: 0}
+    key6: {r: 0, g: 0, b: 0, a: 0}
+    key7: {r: 0, g: 0, b: 0, a: 0}
+    ctime0: 15613
+    ctime1: 37008
+    ctime2: 65535
+    ctime3: 0
+    ctime4: 0
+    ctime5: 0
+    ctime6: 0
+    ctime7: 0
+    atime0: 0
+    atime1: 65535
+    atime2: 0
+    atime3: 0
+    atime4: 0
+    atime5: 0
+    atime6: 0
+    atime7: 0
+    m_Mode: 1
+    m_NumColorKeys: 3
+    m_NumAlphaKeys: 2
+  fill: {fileID: 0}
 --- !u!1 &8914593938963932563
 GameObject:
   m_ObjectHideFlags: 0
@@ -219,10 +280,9 @@ GameObject:
   - component: {fileID: 8914593938963932564}
   - component: {fileID: 8914593938963932570}
   - component: {fileID: 8914593938963932571}
-  - component: {fileID: 7277381914248442703}
   m_Layer: 9
   m_Name: model
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -259,6 +319,8 @@ SpriteRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -420,19 +482,6 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &7277381914248442703
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8914593938963932563}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 05c244d1a20bb57428ab82bf8e6e3a04, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  health: 10
 --- !u!1 &8914593939791869959
 GameObject:
   m_ObjectHideFlags: 0
@@ -505,6 +554,7 @@ GameObject:
   - component: {fileID: 8914593940062630118}
   - component: {fileID: 8914593940062630117}
   - component: {fileID: 8914593940062630119}
+  - component: {fileID: 1491756532}
   m_Layer: 10
   m_Name: Shield
   m_TagString: Untagged
@@ -540,6 +590,8 @@ SpriteRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -624,3 +676,17 @@ MonoBehaviour:
   playerController: {fileID: 8914593938963932567}
   inputButtonName: Mouse 1
   angleOffsetOrientation: 180
+--- !u!114 &1491756532
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8914593940062630115}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 617320cb956325e4e81fa200ffaaba8a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  avoidedDamagePercentage: 0.75
+  isActive: 0

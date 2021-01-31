@@ -48,6 +48,8 @@ SpriteRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -136,4 +138,4 @@ MonoBehaviour:
   damage: 2
   rb: {fileID: 7071836294681724958}
   ImpactEffect: {fileID: 0}
-  noTargetLayers: 08000000
+  noTargetLayers: 080000000a000000

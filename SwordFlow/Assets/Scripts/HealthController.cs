@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -32,10 +30,31 @@ public class HealthController : MonoBehaviour
     public void TakeDamage(float damage)
     {
         health -= damage;
-        if(slider != null)
+        if(gameObject.name == "Player")
+        {
+            CheckPlayerSlider();
+        }
+        if (slider != null)
         {
             slider.value = health;
             fill.color = gradient.Evaluate(slider.normalizedValue);
+        }
+    }
+
+    private void CheckPlayerSlider()
+    {
+
+        if (slider == null)
+        {
+            slider = GameObject.Find("HealthBar").GetComponentInChildren<Slider>();
+        }
+        if (gradient == null)
+        {
+            gradient = GameObject.Find("HealthBar").GetComponentInChildren<Gradient>();
+        }
+        if (fill == null)
+        {
+            fill = GameObject.Find("HealthBar").GetComponentInChildren<Image>();
         }
     }
 }

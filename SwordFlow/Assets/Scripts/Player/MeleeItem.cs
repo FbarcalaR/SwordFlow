@@ -32,6 +32,8 @@ namespace SwordFlowScripts
         }
         void Update()
         {
+            if (cam == null)
+                cam = FindObjectOfType<Camera>();
             mousePos = cam.ScreenToWorldPoint(Input.mousePosition);
 
             if (Input.GetButtonDown(inputButtonName))

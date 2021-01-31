@@ -1,5 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class RoomGenerator : MonoBehaviour
@@ -35,7 +35,8 @@ public class RoomGenerator : MonoBehaviour
     private float roomXLenght;              //the x size of the room
     private float roomYLenght;              //the y size of the room
     private bool[,] positions;              //the matrix with the positions where the rooms have to be instantiated
-    private List<int[]> instanciatedRooms;  //List with the matrix positions where the rooms had been instantiated
+    private List<int[]> instantiatedRoomsPositions;  //List with the matrix positions where the rooms had been instantiated
+    private List<GameObject> instantiatedRooms;
     private int roomsNumber;                //the final number of rooms
 
     void Start()
@@ -48,7 +49,7 @@ public class RoomGenerator : MonoBehaviour
         //set the number of rooms randomly between bounds
         roomsNumber = Random.Range(minRooms, maxRooms);
         //instantiate List and matrix
-        instanciatedRooms = new List<int[]>();
+        instantiatedRoomsPositions = new List<int[]>();
         positions = new bool[roomsNumber * 2 + 1, roomsNumber * 2 + 1];
 
         //Initialize matrix of positions
@@ -59,10 +60,12 @@ public class RoomGenerator : MonoBehaviour
         //set the central room in the matrix and the List and instantiate it in game
         positions[roomsNumber, roomsNumber] = true;
         int[] centralRoom = { roomsNumber, roomsNumber };
-        instanciatedRooms.Add(centralRoom);
+        instantiatedRoomsPositions.Add(centralRoom);
 
         setPositionsMatrix();
+        instantiatedRooms = new List<GameObject>();
         InstantiateRooms();
+        SpawnLevelEnd(instantiatedRooms);
     }
 
     //Once the central room is set in Start, this function will instantiate the rest of the rooms.
@@ -71,12 +74,12 @@ public class RoomGenerator : MonoBehaviour
     //List will be updated with the new room and the room will be instantiated in the game.
     private void setPositionsMatrix()
     {
-        while (instanciatedRooms.Count < roomsNumber)
+        while (instantiatedRoomsPositions.Count < roomsNumber)
         {
             int[] position = getPositionNoNeighbour();
 
             positions[position[0], position[1]] = true;
-            instanciatedRooms.Add(position);
+            instantiatedRoomsPositions.Add(position);
         }
     }
 
@@ -159,15 +162,24 @@ public class RoomGenerator : MonoBehaviour
                     }
 
                     Vector3 instantiatePosition = new Vector3((thisRoom[0] - roomsNumber) * roomXLenght, -(thisRoom[1] - roomsNumber) * roomYLenght, 0);
-                    Instantiate(roomToInstatiatePrefab, instantiatePosition, Quaternion.identity);
+                    instantiatedRooms.Add(Instantiate(roomToInstatiatePrefab, instantiatePosition, Quaternion.identity));
                 }
                 else if (!positions[i, j] && numberOfNeighbours(thisRoom) > 0)
                 {
                     var roomToInstatiatePrefab = GetRandomRoomFromList(roomsWithoutExits);
                     Vector3 instantiatePosition = new Vector3((thisRoom[0] - roomsNumber) * roomXLenght, -(thisRoom[1] - roomsNumber) * roomYLenght, 0);
-                    Instantiate(roomToInstatiatePrefab, instantiatePosition, Quaternion.identity);
+                    instantiatedRooms.Add(Instantiate(roomToInstatiatePrefab, instantiatePosition, Quaternion.identity));
                 }
             }
+    }
+
+    private void SpawnLevelEnd(List<GameObject> instantiatedRooms)
+    {
+        var roomsWithEndLevelPoint = instantiatedRooms.Where(iR => iR.GetComponentInChildren<EndSpawnPoint>()).ToArray();
+        int index = Random.Range(0, roomsWithEndLevelPoint.Count());
+
+        var selectedRoom = roomsWithEndLevelPoint[index].GetComponentInChildren<EndSpawnPoint>();
+        selectedRoom.SpawnLevelEnd();
     }
 
     //this function returns a valid position that only has one neighbour and has not been instantiated
@@ -176,7 +188,7 @@ public class RoomGenerator : MonoBehaviour
         List<int[]> posiblePositions = new List<int[]>();
 
         //all the instantiated rooms are checked
-        foreach (int[] roomPosition in instanciatedRooms)
+        foreach (int[] roomPosition in instantiatedRoomsPositions)
         {
             //for every instantiated room,
             //the surrounding positions (no corners) are checked.

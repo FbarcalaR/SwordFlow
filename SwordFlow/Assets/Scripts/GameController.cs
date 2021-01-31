@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -10,19 +9,28 @@ public class GameController : MonoBehaviour
     public Text gameOverText;
 
     private bool reloading = false;
+    private static GameController _instance;
 
-    // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
-        
+
+        if (_instance == null)
+        {
+            _instance = this;
+            DontDestroyOnLoad(this.gameObject);
+        }
+        else
+        {
+            Destroy(this);
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (player == null && !reloading)
+        if (GameObject.Find("Player") == null && !_instance.reloading)
         {
-            reloading = true;
+            _instance.reloading = true;
             StartCoroutine(reloadScene());
         }
         if (Input.GetKeyDown(KeyCode.Escape))
@@ -33,10 +41,22 @@ public class GameController : MonoBehaviour
 
     public IEnumerator reloadScene()
     {
-        gameOverText.enabled = true;
+        _instance.gameOverText.enabled = true;
 
         yield return new WaitUntil(() => Input.GetButtonDown("Submit"));
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+
+        Invoke("ResetProps", 0.25f);
+    }
+
+    void ResetProps()
+    {
+        _instance.gameOverText.enabled = false;
+        _instance.reloading = false;
+        var gameScore = FindObjectOfType<GameScore>();
+        gameScore.AddScore(-gameScore.score);
+        var player = FindObjectOfType<PlayerSingleton>().gameObject;
+        player.GetComponent<HealthController>().TakeDamage(0);
     }
 
     void Quit()

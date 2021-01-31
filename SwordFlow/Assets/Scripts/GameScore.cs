@@ -1,37 +1,48 @@
-﻿using UnityEngine;
+﻿using System.Linq;
+using UnityEngine;
 using UnityEngine.UI;
 
 public class GameScore : MonoBehaviour
 {
-    public int score;
     public Text scoreText;
     public Text highScoreText;
 
+    public int score;
     private int highScore;
     private const string HighScoreKey = "highScore";
+    private static GameScore _instance;
 
-    // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
-        highScore = PlayerPrefs.GetInt(HighScoreKey, 0);
-        highScoreText.text = "High Score: " + highScore;
+        if (_instance == null)
+        {
+            _instance = this;
+            DontDestroyOnLoad(this.gameObject);
+            _instance.score = 0;
+            highScore = PlayerPrefs.GetInt(HighScoreKey, 0);
+        }
+        else
+        {
+            Destroy(this);
+        }
     }
 
-    // Update is called once per frame
-    void Update()
+    private void Update()
     {
-        
+        _instance.highScoreText.text = "High Score: " + _instance.highScore;
+        _instance.scoreText.text = "Score: " + _instance.score;
     }
 
     public void AddScore(int scoreToAdd)
     {
-        score += scoreToAdd;
+        _instance.score += scoreToAdd;
 
-        scoreText.text = "Score: " + score;
-        if(score > highScore)
+        _instance.scoreText.text = "Score: " + _instance.score;
+        if(_instance.score > _instance.highScore)
         {
-            PlayerPrefs.SetInt(HighScoreKey, score);
-            highScoreText.text = "High Score: " + score;
+            _instance.highScore = _instance.score;
+            PlayerPrefs.SetInt(HighScoreKey, _instance.score);
+            _instance.highScoreText.text = "High Score: " + _instance.highScore;
         }
     }
 }

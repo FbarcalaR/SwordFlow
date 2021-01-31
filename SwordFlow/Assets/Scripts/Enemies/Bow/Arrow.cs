@@ -19,14 +19,14 @@ public class Arrow : MonoBehaviour
     {
         if (!noTargetLayers.Contains(collision.gameObject.layer))
         {
-            HealthController healthComponent = collision.GetComponent<HealthController>();
+            HealthController healthComponent = collision.GetComponentInParent<HealthController>();
             if (healthComponent != null)
             {
                 healthComponent.TakeDamage(damage);
                 if (ImpactEffect != null) Instantiate(ImpactEffect, transform.position, transform.rotation);
             }
-            Destroy(gameObject);
         }
+        Destroy(gameObject);
 
     }
 }
